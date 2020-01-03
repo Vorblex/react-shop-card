@@ -35,6 +35,11 @@ export default class extends Component {
   }
 
   changeInputValue(inputValue) {
+
+    inputValue = parseInt( inputValue )
+    inputValue = isNaN(inputValue) ? this.props.min : inputValue
+
+
     this.setState( () => {
       return {
         inputValue
