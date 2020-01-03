@@ -6,7 +6,7 @@ import './App.css'
 export default class extends Component {
 
   state = {
-    cnt: 0,
+    cnt: 1,
     min: 1,
     max: 60
   }
@@ -20,13 +20,12 @@ export default class extends Component {
   }
 
   render() {
-    const { cnt, ...minmax } = this.state
 
     return (
       <div className="App">
         <div className="container">
-        {cnt}
-        <Card { ...minmax }
+        {this.state.cnt}
+        <Card { ...this.state }
               onChangeCnt={ this.changeCnt }
         />
         </div>

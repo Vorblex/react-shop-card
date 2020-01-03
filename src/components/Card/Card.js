@@ -5,25 +5,30 @@ import './Card.css'
 
 export default class extends Component {
 
-  static propTypes = {
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired
+  static defaultProps = {
+    onChangeCnt: function(){}
   }
 
-  state = {
-    cnt: this.props.min,
-    inputValue: this.props.min
+  static propTypes = {
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    cnt: PropTypes.number.isRequired,
+    onChangeCnt: PropTypes.func
+  }
+
+  state = { 
+    inputValue: this.props.cnt
   }
 
   inc = () => {
-    this.setCnt(+this.state.inputValue + 1)
+    this.setCnt(this.props.cnt + 1)
   }
 
   dec = () => {
-    this.setCnt(+this.state.inputValue - 1)
+    this.setCnt(this.props.cnt - 1)
   }
 
-  changeInputValue(inputValue) {
+  changeInputValue = inputValue => {
     this.setState({ inputValue })
   }
 
@@ -32,31 +37,27 @@ export default class extends Component {
 
     cnt = Math.min(Math.max(cnt, min), max);
     
-    this.setState( {
-      cnt,
-      inputValue : cnt
-    } )
+    this.setState({ inputValue : cnt })
 
     onChangeCnt( cnt )
   }
 
-  applyCnt = () => {
+  applyInputValue = () => {
       const cnt = parseInt( this.state.inputValue )
-      this.setCnt( isNaN( cnt ) ? this.props.min : cnt )
+      this.setCnt( isNaN( cnt ) ? this.props.cnt : cnt )
   }
 
   checkEnterKeycode = ({ keyCode }) => {
     if ( keyCode !== 13 ) return
-    this.applyCnt()
+    this.applyInputValue()
   }
 
   render() {
 
-    const { cnt, inputValue } = this.state
+    const { inputValue } = this.state
 
     return (
       <div className="Card d-flex pt-3 mb-3">
-        {cnt}
         <button type="button"
                 className="btn btn-sm btn-outline-info"
                 onClick={ this.dec }
@@ -68,7 +69,7 @@ export default class extends Component {
                className="form-control mx-3" 
                value={ inputValue }
                onChange={ e => this.changeInputValue(e.target.value) }
-               onBlur={ this.applyCnt }
+               onBlur={ this.applyInputValue }
                onKeyDown={ this.checkEnterKeycode }
         />
 
@@ -78,7 +79,6 @@ export default class extends Component {
         >
           +
         </button>
-        {inputValue}
       </div>
     )
   }
