@@ -11,61 +11,47 @@ export default class extends Component {
   }
 
   state = {
+    cnt: this.props.min,
     inputValue: this.props.min
   }
 
   inc = () => {
     this.setCnt(+this.state.inputValue + 1)
-    // this.setState( ( state, { cnt }) => {
-
-    //   return {
-    //     innerCnt: +cnt + 1
-    //   }
-    // })
   }
 
   dec = () => {
     this.setCnt(+this.state.inputValue - 1)
-    // this.setState( ( state, { cnt }) => {
-
-    //   return {
-    //     innerCnt: cnt - 1
-    //   }
-    // })
   }
 
   changeInputValue(inputValue) {
-
-    inputValue = parseInt( inputValue )
-    inputValue = isNaN(inputValue) ? this.props.min : inputValue
-
-
-    this.setState( () => {
-      return {
-        inputValue
-      }
-    })
+    this.setState({ inputValue })
   }
 
-  setCnt = (value) => {
-    const { cnt, onChangeCnt, min, max } = this.props
+  setCnt = cnt => {
+    const { min, max, onChangeCnt } = this.props
 
-    if (isNaN(value)) return this.setState( { inputValue : cnt } )
+    cnt = Math.min(Math.max(cnt, min), max);
+    
+    this.setState( {
+      cnt,
+      inputValue : cnt
+    } )
 
-    value = parseInt( value )
+    onChangeCnt( cnt )
+  }
 
-    value = Math.min(Math.max(value, min), max);
-
-    onChangeCnt( value )
-    this.setState( { inputValue : value } )
+  applyCnt = () => {
+      const cnt = parseInt( this.state.inputValue )
+      this.setCnt( isNaN( cnt ) ? this.props.min : cnt )
   }
 
   render() {
 
-    const { inputValue } = this.state
+    const { cnt, inputValue } = this.state
 
     return (
       <div className="Card d-flex pt-3 mb-3">
+        {cnt}
         <button type="button"
                 className="btn btn-sm btn-outline-info"
                 onClick={ this.dec }
@@ -77,7 +63,7 @@ export default class extends Component {
                className="form-control mx-3" 
                value={ inputValue }
                onChange={ e => this.changeInputValue(e.target.value) }
-               onBlur={ e => this.setCnt(e.target.value) }
+               onBlur={ this.applyCnt }
         />
 
         <button type="button"
