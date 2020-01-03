@@ -45,6 +45,11 @@ export default class extends Component {
       this.setCnt( isNaN( cnt ) ? this.props.min : cnt )
   }
 
+  checkEnterKeycode = ({ keyCode }) => {
+    if ( keyCode !== 13 ) return
+    this.applyCnt()
+  }
+
   render() {
 
     const { cnt, inputValue } = this.state
@@ -64,6 +69,7 @@ export default class extends Component {
                value={ inputValue }
                onChange={ e => this.changeInputValue(e.target.value) }
                onBlur={ this.applyCnt }
+               onKeyDown={ this.checkEnterKeycode }
         />
 
         <button type="button"
