@@ -20,15 +20,13 @@ export default class extends Component {
   }
 
   render() {
-    const { cnt, min, max } = this.state
+    const { cnt, ...minmax } = this.state
 
     return (
       <div className="App">
         <div className="container">
         {cnt}
-        <Card cnt={ cnt }
-              min={ min }
-              max={ max }
+        <Card { ...minmax }
               onChangeCnt={ this.changeCnt }
         />
         </div>
